@@ -33,6 +33,8 @@ public class CuentaImpl extends UnicastRemoteObject implements Cuenta {
      */
     public CuentaImpl(String idTitular, String nombre) throws Exception {
         super();
+        // Cargar explícitamente el driver JDBC
+        Class.forName("org.postgresql.Driver");
         this.idTitular = idTitular;
         this.nombre = nombre;
         // Crear la cuenta en la base de datos si no existe
@@ -155,16 +157,20 @@ public class CuentaImpl extends UnicastRemoteObject implements Cuenta {
     /**
      * Obtiene el identificador del titular.
      * @return El ID del titular
+     * @throws RemoteException Si ocurre un error en la comunicación RMI
      */
-    public String getIdTitular() {
+    @Override
+    public String getIdTitular() throws RemoteException {
         return idTitular;
     }
 
     /**
      * Obtiene el nombre del titular.
      * @return El nombre del titular
+     * @throws RemoteException Si ocurre un error en la comunicación RMI
      */
-    public String getNombre() {
+    @Override
+    public String getNombre() throws RemoteException {
         return nombre;
     }
 

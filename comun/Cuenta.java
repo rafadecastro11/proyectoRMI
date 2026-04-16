@@ -29,4 +29,18 @@ public interface Cuenta extends Remote {
      * @throws RemoteException Si ocurre un error en la comunicación RMI
      */
     void retirar(float cuantia) throws RemoteException;
+
+    /**
+     * Obtiene el identificador del titular.
+     * @return El ID del titular
+     * @throws RemoteException Si ocurre un error en la comunicación RMI
+     */
+    String getIdTitular() throws RemoteException;
+
+    /**
+     * Obtiene el nombre del titular.
+     * @return El nombre del titular
+     * @throws RemoteException Si ocurre un error en la comunicación RMI
+     */
+    String getNombre() throws RemoteException;
 }

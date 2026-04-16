@@ -30,7 +30,9 @@ public class BancoImpl extends UnicastRemoteObject implements Banco {
      */
     public BancoImpl() throws Exception {
         super();
-        System.out.println("BancoImpl inicializado");
+        // Cargar explícitamente el driver JDBC
+        Class.forName("org.postgresql.Driver");
+        System.out.println("BancoImpl inicializado - Driver PostgreSQL cargado");
     }
 
     /**
