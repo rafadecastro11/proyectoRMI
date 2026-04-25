@@ -12,16 +12,13 @@ import java.rmi.RemoteException;
  */
 public class ServidorBanco {
 
-    // Puerto para el registro RMI
+   
     private static final int RMI_PORT = 54321;
 
-    // Nombre con el que se registra el servicio
+
     private static final String SERVICE_NAME = "Banco";
 
-    /**
-     * Método principal que inicia el servidor bancario.
-     * @param args Argumentos de línea de comandos (no utilizados)
-     */
+
     public static void main(String[] args) {
         System.out.println("=== Iniciando Servidor Bancario Distribuido ===");
         System.out.println("Universidad de Sevilla - Sistemas Distribuidos");

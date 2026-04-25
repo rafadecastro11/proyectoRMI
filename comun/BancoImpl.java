@@ -10,16 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del objeto remoto Banco (Patrón Fábrica).
- * Extiende UnicastRemoteObject y crea objetos CuentaImpl.
- * Universidad de Sevilla - Sistemas Distribuidos
- */
 public class BancoImpl extends UnicastRemoteObject implements Banco {
 
     private static final long serialVersionUID = 1L;
 
-    // Configuración de la base de datos
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/banco";
     private static final String DB_USER = "postgres";
     private static final String DB_PASSWORD = "postgres";
@@ -30,7 +24,6 @@ public class BancoImpl extends UnicastRemoteObject implements Banco {
      */
     public BancoImpl() throws Exception {
         super();
-        // Cargar explícitamente el driver JDBC
         Class.forName("org.postgresql.Driver");
         System.out.println("BancoImpl inicializado - Driver PostgreSQL cargado");
     }
@@ -50,7 +43,7 @@ public class BancoImpl extends UnicastRemoteObject implements Banco {
         try {
             System.out.println("Creando cuenta para titular: " + t.getNombre() + " (ID: " + t.getId() + ")");
 
-            // Crear y retornar la nueva cuenta
+           
             CuentaImpl nuevaCuenta = new CuentaImpl(t.getId(), t.getNombre());
             return nuevaCuenta;
 
