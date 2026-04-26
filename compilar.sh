@@ -6,6 +6,9 @@
 echo "Limpiando ficheros .class antiguos..."
 find . -name "*.class" -delete
 
+echo "Inciamos posgresql"
+sudo systemctl start postgresql
+
 # 2. Compilación de la capa de comunicación (Interfaces y Clases Serializables)
 # Compilamos primero el paquete 'comun' porque contiene las interfaces Remotas
 # y los objetos que se pasan por valor (Serializable), necesarios para los otros módulos.
