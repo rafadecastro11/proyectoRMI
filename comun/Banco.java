@@ -11,4 +11,6 @@ public interface Banco extends Remote {
     Cuenta crearCuenta(Titular t) throws RemoteException;
 
     List<Cuenta> obtenerCuentas() throws RemoteException;
+
+    void crearUsuario(Titular t) throws RemoteException;
 }

@@ -41,23 +41,26 @@ public class ClienteBanco {
             boolean continuar = true;
             while (continuar) {
                 mostrarMenuPrincipal();
-                int opcion = leerOpcion(1, 4);
+                int opcion = leerOpcion(1, 5);
 
                 switch (opcion) {
                     case 1:
                         identificarse();
                         break;
                     case 2:
+                        registrarse();
+                        break;
+                    case 3:
                         if (cuentaUsuario != null) {
                             mostrarMenuOperaciones();
                         } else {
-                            System.out.println("Debe identificarse primero.");
+                            System.out.println("Debe identificarse o registrarse primero.");
                         }
                         break;
-                    case 3:
+                    case 4:
                         listarCuentas();
                         break;
-                    case 4:
+                    case 5:
                         continuar = false;
                         System.out.println("Saliendo del sistema...");
                         break;
@@ -89,9 +92,10 @@ public class ClienteBanco {
             System.out.println("Saldo actual: " + obtenerSaldoFormatado());
         }
         System.out.println("1. Identificarse");
-        System.out.println("2. Realizar operaciones");
-        System.out.println("3. Ver cuentas del sistema");
-        System.out.println("4. Salir");
+        System.out.println("2. Registrarse (crear nuevo usuario)");
+        System.out.println("3. Realizar operaciones");
+        System.out.println("4. Ver cuentas del sistema");
+        System.out.println("5. Salir");
         System.out.print("Seleccione una opción: ");
     }
 
@@ -127,24 +131,56 @@ public class ClienteBanco {
                 System.out.println("Identificación correcta. Bienvenido, " + nombreTitular);
             } else {
                 System.out.println("No existe una cuenta con ID: " + idTitular);
-                System.out.print("¿Desea crear una nueva cuenta? (s/n): ");
-                String respuesta = scanner.nextLine().trim().toLowerCase();
-
-                if (respuesta.equals("s") || respuesta.equals("si")) {
-                    System.out.print("Introduzca su nombre completo: ");
-                    nombreTitular = scanner.nextLine().trim();
-
-                    Titular nuevoTitular = new Titular(idTitular, nombreTitular);
-                    cuentaUsuario = banco.crearCuenta(nuevoTitular);
-                    System.out.println("Cuenta creada exitosamente.");
-                } else {
-                    idTitular = null;
-                    nombreTitular = null;
-                }
+                System.out.println("Use la opción 'Registrarse' para crear una nueva cuenta.");
+                idTitular = null;
+                nombreTitular = null;
             }
 
         } catch (Exception e) {
             System.err.println("Error al identificar: " + e.getMessage());
+        }
+    }
+
+    private static void registrarse() {
+        try {
+            System.out.println("\n=== REGISTRO DE NUEVO USUARIO ===");
+            System.out.print("Introduzca su ID de titular: ");
+            idTitular = scanner.nextLine().trim();
+
+            if (idTitular.isEmpty()) {
+                System.out.println("ID inválido.");
+                return;
+            }
+
+            // Verificar si el usuario ya existe
+            List<Cuenta> cuentas = banco.obtenerCuentas();
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdTitular() != null && cuenta.getIdTitular().equals(idTitular)) {
+                    System.out.println("Ya existe un usuario con ID: " + idTitular);
+                    System.out.println("Use la opción 'Identificarse' para acceder.");
+                    return;
+                }
+            }
+
+            System.out.print("Introduzca su nombre completo: ");
+            nombreTitular = scanner.nextLine().trim();
+
+            if (nombreTitular.isEmpty()) {
+                System.out.println("Nombre inválido.");
+                return;
+            }
+
+            // Crear el usuario en la base de datos
+            Titular nuevoTitular = new Titular(idTitular, nombreTitular);
+            banco.crearUsuario(nuevoTitular);
+            System.out.println("Usuario registrado exitosamente.");
+            System.out.println("Bienvenido, " + nombreTitular);
+
+            // Crear la cuenta remota para el usuario
+            cuentaUsuario = banco.crearCuenta(nuevoTitular);
+
+        } catch (Exception e) {
+            System.err.println("Error al registrar: " + e.getMessage());
         }
     }
 

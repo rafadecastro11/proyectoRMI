@@ -86,4 +86,34 @@ public class BancoImpl extends UnicastRemoteObject implements Banco {
 
         return cuentas;
     }
+
+    /**
+     * Crea un nuevo usuario (titular) en la base de datos.
+     * @param t El titular a crear
+     * @throws RemoteException Si ocurre un error en la comunicación RMI
+     */
+    @Override
+    public void crearUsuario(Titular t) throws RemoteException {
+        if (t == null || t.getId() == null || t.getId().trim().isEmpty()) {
+            throw new RemoteException("El titular y su ID son obligatorios");
+        }
+        if (t.getNombre() == null || t.getNombre().trim().isEmpty()) {
+            throw new RemoteException("El nombre del titular es obligatorio");
+        }
+
+        String sql = "INSERT INTO cuentas (id_titular, nombre, saldo) VALUES (?, ?, 0.0)";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, t.getId());
+            stmt.setString(2, t.getNombre());
+            stmt.executeUpdate();
+
+            System.out.println("Usuario creado: " + t.getNombre() + " (ID: " + t.getId() + ")");
+
+        } catch (SQLException e) {
+            throw new RemoteException("Error al crear usuario: " + e.getMessage(), e);
+        }
+    }
 }
